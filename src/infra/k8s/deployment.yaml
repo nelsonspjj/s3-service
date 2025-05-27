@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-s3-deployment
+  labels:
+    app: app-s3
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-s3
+  template:
+    metadata:
+      labels:
+        app: app-s3
+    spec:
+      serviceAccountName: app-s3-sa
+      containers:
+        - name: app-s3
+          image: 597088031350.dkr.ecr.us-east-1.amazonaws.com/app-s3/app-s3:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: AWS_REGION
+              value: us-east-1
+            - name: AWS_BUCKET_NAME
+              value: springboot-s3-bucket-file-storage
